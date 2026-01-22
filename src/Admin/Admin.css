@@ -1,4 +1,15 @@
 /* ================================
+   GLOBAL FONT
+================================ */
+
+body {
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background: #f3f4f6;
+  color: #111827;
+}
+
+/* ================================
    ADMIN LAYOUT
 ================================ */
 
@@ -6,7 +17,6 @@
   display: flex;
   height: 100vh;
   width: 100%;
-  font-family: sans-serif;
 }
 
 /* ================================
@@ -18,26 +28,23 @@
   background: #111827;
   color: white;
   padding: 20px;
-
-  position: relative; 
+  position: relative;
 }
-
 
 .sidebar h2 {
   margin-bottom: 20px;
   font-size: 18px;
+  font-weight: 600;
 }
 
 .sidebar ul {
   list-style: none;
   padding: 0;
   margin: 0;
-
-  display: flex;          
-  flex-direction: column; 
-  flex: 1;                
+  display: flex;
+  flex-direction: column;
+  flex: 1;
 }
-
 
 .sidebar li {
   margin: 15px 0;
@@ -50,14 +57,12 @@
 
 .sidebar ul li:last-child {
   position: absolute;
-  bottom: 20px;        
-  left: 50%;           
-  transform: translateX(-50%); 
-
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
   color: #ef4444;
   font-weight: 500;
 }
-
 
 /* ================================
    ADMIN CONTENT
@@ -91,9 +96,10 @@
   background-color: #2563eb;
   color: #ffffff;
   border: none;
-  padding: 8px 16px;
+  padding: 8px 18px;
   border-radius: 6px;
   font-size: 14px;
+  font-weight: 500;
   cursor: pointer;
 }
 
@@ -109,18 +115,69 @@
   background: white;
   padding: 25px;
   width: 95%;
+  max-width: 900px;
   border-radius: 10px;
 }
 
+/* Inputs / textarea / select */
 .form-container input,
-.form-container textarea {
+.form-container textarea,
+.form-container select {
   width: 95%;
-  padding: 10px;
+  padding: 10px 12px;
   margin-bottom: 15px;
   border: 1px solid #d1d5db;
   border-radius: 6px;
+  font-family: inherit;
+  font-size: 15px;
+  color: #111827;
 }
 
+/* Placeholder text */
+.form-container input::placeholder,
+.form-container textarea::placeholder {
+  color: #9ca3af;
+  font-size: 14px;
+}
+
+/* Textarea height */
+.form-container textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+/* Labels */
+.form-container label {
+  display: inline-block;
+  margin-bottom: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #374151;
+}
+
+/* Focus effect */
+.form-container input,
+.form-container textarea {
+  width: 95%;
+  padding: 10px 12px;
+  margin-bottom: 15px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 15px;
+  color: #111827;
+}
+
+.form-container select {
+  width: auto;          /* 👈 back to normal */
+  padding: 6px 8px;
+  font-family: inherit;
+  font-size: 14px;
+  margin-left: 25px;
+}
+
+
+/* Image preview */
 .preview {
   width: 100%;
   margin-bottom: 15px;
@@ -128,42 +185,31 @@
 }
 
 /* ================================
-   FORM BUTTON (ONLY FORM)
+   FORM BUTTON
 ================================ */
 
 .form-container button {
   appearance: none;
   -webkit-appearance: none;
-
   background-color: #2563eb;
   color: #ffffff;
-
   border: none;
-  outline: none;
-
   padding: 10px 22px;
   border-radius: 8px;
   font-size: 15px;
   font-weight: 500;
-
   cursor: pointer;
   margin-top: 10px;
-
-  opacity: 1;
-  box-shadow: none;
 }
 
-/* hover (only enabled) */
 .form-container button:hover:not(:disabled) {
   background-color: #1e40af;
 }
 
-/* disabled */
 .form-container button:disabled {
   background-color: #93c5fd;
   color: #1e3a8a;
   cursor: not-allowed;
-  opacity: 1;
 }
 
 /* ================================
@@ -172,27 +218,17 @@
 
 input[type="file"] {
   margin-bottom: 10px;
+  font-size: 14px;
 }
 
+/* ================================
+   TABLE
+================================ */
 .news-header {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-between; /* 👈 pushes button to the right */
   align-items: center;
   margin-bottom: 20px;
-}
-
-.news-add-btn {
-  background-color: #2563eb;
-  color: white;
-  border: none;
-  padding: 8px 18px;
-  border-radius: 6px;
-  font-size: 14px;
-  cursor: pointer;
-}
-
-.news-add-btn:hover {
-  background-color: #1d4ed8;
 }
 
 .news-table {
@@ -206,10 +242,12 @@ input[type="file"] {
   border: 1px solid #e5e7eb;
   padding: 10px;
   text-align: left;
+  font-size: 14px;
 }
 
 .news-table th {
   background: #f9fafb;
+  font-weight: 600;
 }
 
 .truncate {

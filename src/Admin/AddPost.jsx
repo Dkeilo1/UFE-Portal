@@ -4,7 +4,7 @@ import { supabase } from "../supabase";
 export default function AddPost() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [type, setType] = useState("Мэдээ"); // ✅ NEW
+  const [type, setType] = useState("Мэдээ"); 
   const [image, setImage] = useState(null);
   const [preview, setPreview] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -51,7 +51,7 @@ export default function AddPost() {
       {
         title,
         description,
-        type, // ✅ SAVE TYPE
+        type, 
         image_url: imageUrl,
       },
     ]);
@@ -72,13 +72,13 @@ export default function AddPost() {
 
   return (
     <div className="form-container full">
-      <h1>Add New Post</h1>
+      <h1>Шинэ Мэдээ Нэмэх</h1>
 
       <form onSubmit={handleSubmit}>
         {/* Title */}
         <input
           type="text"
-          placeholder="Title"
+          placeholder="Гарчиг"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           required
@@ -86,7 +86,7 @@ export default function AddPost() {
 
         {/* Description */}
         <textarea
-          placeholder="Description"
+          placeholder="Мэдээ"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           required
