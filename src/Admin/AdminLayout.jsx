@@ -1,6 +1,6 @@
 import { Outlet } from "react-router-dom";
 import Sidebar from "./SideBar";
-import "./Admin.css";   // ⬅⬅⬅ ЭНЭГЭЭ БИТГИЙ МАРТ
+import "./Admin.css";  
 
 export default function AdminLayout() {
   return (
