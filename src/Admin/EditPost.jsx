@@ -117,7 +117,8 @@ export default function EditPost() {
       >
         <option value="Мэдээ">Мэдээ</option>
         <option value="Зар">Зар</option>
-        <option value="Мэдэгдэл">Мэдэгдэл</option>
+        <option value="БСА Зар">Мэдэгдэл</option>
+        <option value="Хурлын зар">Хурлын зар</option>
       </select>
 
       {/* IMAGE SECTION */}
