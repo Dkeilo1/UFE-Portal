@@ -224,6 +224,12 @@ input[type="file"] {
 /* ================================
    TABLE
 ================================ */
+.news-header {
+  display: flex;
+  justify-content: space-between; /* 👈 pushes button to the right */
+  align-items: center;
+  margin-bottom: 20px;
+}
 
 .news-table {
   width: 100%;
