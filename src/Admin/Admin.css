@@ -1,0 +1,228 @@
+/* ================================
+   ADMIN LAYOUT
+================================ */
+
+.admin-container {
+  display: flex;
+  height: 100vh;
+  width: 100%;
+  font-family: sans-serif;
+}
+
+/* ================================
+   SIDEBAR
+================================ */
+
+.sidebar {
+  width: 220px;
+  background: #111827;
+  color: white;
+  padding: 20px;
+
+  position: relative; 
+}
+
+
+.sidebar h2 {
+  margin-bottom: 20px;
+  font-size: 18px;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+
+  display: flex;          
+  flex-direction: column; 
+  flex: 1;                
+}
+
+
+.sidebar li {
+  margin: 15px 0;
+  cursor: pointer;
+}
+
+.sidebar li:hover {
+  opacity: 0.8;
+}
+
+.sidebar ul li:last-child {
+  position: absolute;
+  bottom: 20px;        
+  left: 50%;           
+  transform: translateX(-50%); 
+
+  color: #ef4444;
+  font-weight: 500;
+}
+
+
+/* ================================
+   ADMIN CONTENT
+================================ */
+
+.admin-content {
+  flex: 1;
+  padding: 30px;
+  background: #f3f4f6;
+  overflow-y: auto;
+}
+
+/* ================================
+   NEWS PAGE
+================================ */
+
+.news-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.news-top h2 {
+  font-size: 20px;
+  font-weight: 600;
+}
+
+/* News page add button */
+.news-add-btn {
+  background-color: #2563eb;
+  color: #ffffff;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.news-add-btn:hover {
+  background-color: #1e40af;
+}
+
+/* ================================
+   FORM (ADD / EDIT POST)
+================================ */
+
+.form-container {
+  background: white;
+  padding: 25px;
+  width: 95%;
+  border-radius: 10px;
+}
+
+.form-container input,
+.form-container textarea {
+  width: 95%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+}
+
+.preview {
+  width: 100%;
+  margin-bottom: 15px;
+  border-radius: 8px;
+}
+
+/* ================================
+   FORM BUTTON (ONLY FORM)
+================================ */
+
+.form-container button {
+  appearance: none;
+  -webkit-appearance: none;
+
+  background-color: #2563eb;
+  color: #ffffff;
+
+  border: none;
+  outline: none;
+
+  padding: 10px 22px;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 500;
+
+  cursor: pointer;
+  margin-top: 10px;
+
+  opacity: 1;
+  box-shadow: none;
+}
+
+/* hover (only enabled) */
+.form-container button:hover:not(:disabled) {
+  background-color: #1e40af;
+}
+
+/* disabled */
+.form-container button:disabled {
+  background-color: #93c5fd;
+  color: #1e3a8a;
+  cursor: not-allowed;
+  opacity: 1;
+}
+
+/* ================================
+   FILE INPUT
+================================ */
+
+input[type="file"] {
+  margin-bottom: 10px;
+}
+
+.news-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.news-add-btn {
+  background-color: #2563eb;
+  color: white;
+  border: none;
+  padding: 8px 18px;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.news-add-btn:hover {
+  background-color: #1d4ed8;
+}
+
+.news-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+}
+
+.news-table th,
+.news-table td {
+  border: 1px solid #e5e7eb;
+  padding: 10px;
+  text-align: left;
+}
+
+.news-table th {
+  background: #f9fafb;
+}
+
+.truncate {
+  max-width: 300px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.edit-btn {
+  background: #e5e7eb;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+}
