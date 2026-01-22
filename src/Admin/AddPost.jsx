@@ -72,7 +72,7 @@ export default function AddPost() {
 
   return (
     <div className="form-container full">
-      <h1>Шинэ Мэдээ Нэмэх</h1>
+      <h1>Шинэ Мэдээ</h1>
 
       <form onSubmit={handleSubmit}>
         {/* Title */}
