@@ -17,7 +17,7 @@ export default function Sidebar() {
           Зар, мэдээ
         </li>
 
-        <li onClick={() => navigate("/admin/international")}>
+        <li onClick={() => navigate("/admin/program")}>
           Хөтөлбөрийн танилцуулга
         </li>
 

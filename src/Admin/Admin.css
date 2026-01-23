@@ -264,3 +264,62 @@ input[type="file"] {
   border-radius: 4px;
   cursor: pointer;
 }
+
+/* ================= PROGRAM TABLE ================= */
+
+.program-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  background: white;
+}
+
+.program-table th,
+.program-table td {
+  border: 1px solid #e5e7eb;
+  padding: 10px;
+  text-align: left;
+  font-size: 14px;
+}
+
+.program-table th {
+  background-color: #f3f4f6;
+  font-weight: 600;
+}
+
+.program-table tr:hover {
+  background-color: #f9fafb;
+}
+
+/* ================= SHARED ================= */
+
+.truncate {
+  max-width: 250px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ================= PROGRAM FORM ================= */
+
+.program-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+.program-form textarea {
+  grid-column: span 2;
+  min-height: 100px;
+}
+
+.program-form button {
+  grid-column: span 2;
+}
+
+.preview {
+  grid-column: span 2;
+  max-width: 200px;
+  border-radius: 6px;
+}
+
