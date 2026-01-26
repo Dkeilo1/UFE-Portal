@@ -76,19 +76,24 @@ export default function Program() {
         </thead>
 
         <tbody>
-          {loading ? (
+          {loading && (
             <tr>
-              <td colSpan="11" style={{ textAlign: "center" }}>
+              <td colSpan={11} style={{ textAlign: "center" }}>
                 Loading...
               </td>
             </tr>
-          ) : programs.length === 0 ? (
+          )}
+
+          {!loading && programs.length === 0 && (
             <tr>
-              <td colSpan="11" style={{ textAlign: "center" }}>
+              <td colSpan={11} style={{ textAlign: "center" }}>
                 No programs found
               </td>
             </tr>
-          ) : (
+          )}
+
+          {!loading &&
+            programs.length > 0 &&
             programs.map((item, index) => (
               <tr key={item.id}>
                 <td>{index + 1}</td>
@@ -98,7 +103,7 @@ export default function Program() {
                 <td>{item.country}</td>
                 <td>{item.city}</td>
                 <td>{item.duration}</td>
-                <td>{item.lang}</td> {/* ✅ FIXED */}
+                <td>{item.lang}</td>
                 <td>{item.tuition}</td>
                 <td className="truncate">{item.description}</td>
                 <td>
@@ -112,8 +117,7 @@ export default function Program() {
                   </button>
                 </td>
               </tr>
-            ))
-          )}
+            ))}
         </tbody>
       </table>
     </div>
