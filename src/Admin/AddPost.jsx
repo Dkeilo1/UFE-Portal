@@ -99,6 +99,7 @@ export default function AddPost() {
           <option value="Зар">Зар</option>
           <option value="БСА Зар">БСА Зар</option>
           <option value="Хурлын зар">Хурлын зар</option>
+          <option value="Ажлын байрны зар">Ажлын байрны зар</option>
         </select>
 
         {/* Image */}
