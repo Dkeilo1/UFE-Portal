@@ -138,6 +138,8 @@ export default function ProgramAddPost() {
           <option value="">Хөтөлбөр сонгох</option>
           <option value="Үндсэн">Үндсэн</option>
           <option value="Хамтарсан">Хамтарсан</option>
+          <option value="Олон улсад дамжин суралцах хөтөлбөр /Rotation/">Олон улсад дамжин суралцах хөтөлбөр /Rotation/</option>
+          <option value="Олон улсын мэргэжлийн дипломтой хөтөлбөр /BTEC/">Олон улсын мэргэжлийн дипломтой хөтөлбөр /BTEC/</option>
         </select>
 
         <textarea
