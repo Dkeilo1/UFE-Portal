@@ -38,7 +38,7 @@ export default function EditPost() {
     if (data) {
       setTitle(data.title || "");
       setDescription(data.description || "");
-      setType(data.type || ""); // ✅ used by select
+      setType(data.type || "");
       setImageUrl(data.image_url || "");
     }
   };
@@ -57,7 +57,7 @@ export default function EditPost() {
       const filePath = `news/${id}-${Date.now()}.${fileExt}`;
 
       const { error: uploadError } = await supabase.storage
-        .from("images") // your bucket name
+        .from("images")
         .upload(filePath, newImage, { upsert: true });
 
       if (uploadError) {
@@ -76,9 +76,33 @@ export default function EditPost() {
       .update({
         title,
         description,
-        type, // ✅ selected value
+        type,
         image_url: finalImageUrl,
       })
+      .eq("id", id);
+
+    if (error) {
+      alert(error.message);
+      setLoading(false);
+      return;
+    }
+
+    setLoading(false);
+    navigate("/admin/news");
+  };
+
+  /* ================================
+     DELETE POST
+  ================================ */
+  const deletePost = async () => {
+    const confirmDelete = window.confirm("Энэ мэдээг устгах уу?");
+    if (!confirmDelete) return;
+
+    setLoading(true);
+
+    const { error } = await supabase
+      .from("news")
+      .delete()
       .eq("id", id);
 
     if (error) {
@@ -110,18 +134,14 @@ export default function EditPost() {
         placeholder="Товч мэдээ"
       />
 
-      {/* ✅ TYPE SELECT (SAME AS ADD POST) */}
-      <select
-        value={type}
-        onChange={(e) => setType(e.target.value)}
-      >
+      <select value={type} onChange={(e) => setType(e.target.value)}>
         <option value="Мэдээ">Мэдээ</option>
         <option value="Зар">Зар</option>
         <option value="БСА Зар">Мэдэгдэл</option>
         <option value="Хурлын зар">Хурлын зар</option>
       </select>
 
-      {/* IMAGE SECTION */}
+      {/* IMAGE */}
       <div style={{ marginTop: "16px" }}>
         <p style={{ fontWeight: 600 }}>Одоогийн зураг</p>
 
@@ -156,6 +176,19 @@ export default function EditPost() {
         style={{ marginTop: "16px" }}
       >
         {loading ? "Хадгалж байна..." : "Хадгалах"}
+      </button>
+
+      <button
+        type="button"
+        onClick={deletePost}
+        disabled={loading}
+        style={{
+          marginTop: "10px",
+          background: "#dc2626",
+          color: "white",
+        }}
+      >
+        Устгах
       </button>
     </div>
   );
