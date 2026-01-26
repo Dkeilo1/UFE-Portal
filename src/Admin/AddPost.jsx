@@ -108,10 +108,9 @@ export default function AddPost() {
         {preview && <img src={preview} className="preview" />}
 
         <button className="upload-btn" disabled={loading}>
-          {loading ? "Хадгалаж байна..." : "Хадгалах"}
+          {loading ? "Хадгалж байна..." : "Хадгалах"}
         </button>
       </form>
     </div>
   );
 }
-``
