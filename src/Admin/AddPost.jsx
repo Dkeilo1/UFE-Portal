@@ -108,7 +108,7 @@ export default function AddPost() {
         {preview && <img src={preview} className="preview" />}
 
         <button className="upload-btn" disabled={loading}>
-          {loading ? "Uploading..." : "Upload"}
+          {loading ? "Хадгалаж байна..." : "Хадгалах"}
         </button>
       </form>
     </div>
