@@ -153,7 +153,7 @@ export default function EditPost() {
             alt="Current"
             style={{
               width: "100%",
-              maxHeight: "220px",
+              maxHeight: "800px",
               objectFit: "cover",
               borderRadius: "8px",
               marginBottom: "10px",
