@@ -67,7 +67,7 @@ export default function AddPost() {
       alert(error.message);
     } else {
       alert("News added successfully!");
-      navigate("/admin/news"); // ✅ ADDED (AUTO REDIRECT)
+      navigate("/admin/news"); 
     }
 
     setLoading(false);

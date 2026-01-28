@@ -144,23 +144,13 @@ export default function EditPost() {
       </select>
 
       {/* IMAGE */}
-      <div style={{ marginTop: "16px" }}>
-        <p style={{ fontWeight: 600 }}>Одоогийн зураг</p>
+      <div style={{ marginTop: "12px" }}>
+        <p><b>Одоогийн зураг</b></p>
 
         {imageUrl ? (
-          <img
-            src={imageUrl}
-            alt="Current"
-            style={{
-              width: "100%",
-              maxHeight: "800px",
-              objectFit: "cover",
-              borderRadius: "8px",
-              marginBottom: "10px",
-            }}
-          />
+          <img src={imageUrl} alt="Program" className="preview" />
         ) : (
-          <p style={{ color: "#6b7280" }}>Зураг байхгүй</p>
+          <p>Зураг байхгүй</p>
         )}
 
         <p style={{ fontWeight: 600 }}>Зураг солих</p>
