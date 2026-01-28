@@ -16,7 +16,7 @@ export default function Home() {
       if (error) {
         console.error(error);
       } else {
-        setPosts(data);
+        setPosts(data || []);
       }
 
       setLoading(false);
@@ -38,7 +38,11 @@ export default function Home() {
           <div className="post-card" key={post.id}>
             <img src={post.image_url} alt={post.title} />
             <h3>{post.title}</h3>
-            <p>{post.description}</p>
+
+            <div
+              className="post-description"
+              dangerouslySetInnerHTML={{ __html: post.description }}
+            />
           </div>
         ))}
       </div>
