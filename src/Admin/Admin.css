@@ -142,7 +142,7 @@ body {
 
 /* Textarea height */
 .form-container textarea {
-  min-height: 120px;
+  min-height: 300px;
   resize: vertical;
 }
 
