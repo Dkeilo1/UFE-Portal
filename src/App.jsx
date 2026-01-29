@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import Home from "./pages/home";
 import AdminLayout from "./Admin/AdminLayout";
 import AddPost from "./Admin/AddPost";
@@ -7,7 +7,7 @@ import ProtectedAdmin from "./Admin/ProtectedAdmin";
 import News from "./Admin/News";
 import EditPost from "./Admin/EditPost";
 
-// ✅ PROGRAM IMPORTS
+// PROGRAM IMPORTS
 import Program from "./Admin/Program";
 import ProgramAddPost from "./Admin/ProgramAddPost";
 import EditProgram from "./Admin/EditProgram";
@@ -15,7 +15,9 @@ import EditProgram from "./Admin/EditProgram";
 function App() {
   return (
     <Routes>
-      <Route path="/" element={<Home />} />
+      {/* 🔁 Redirect root to admin login */}
+      <Route path="/" element={<Navigate to="/admin-login" replace />} />
+
       <Route path="/admin-login" element={<AdminLogin />} />
 
       <Route
@@ -35,7 +37,7 @@ function App() {
         {/* PROGRAM */}
         <Route path="program" element={<Program />} />
         <Route path="program/add" element={<ProgramAddPost />} />
-        <Route path="/admin/program/edit/:id" element={<EditProgram />} />
+        <Route path="program/edit/:id" element={<EditProgram />} />
       </Route>
     </Routes>
   );
