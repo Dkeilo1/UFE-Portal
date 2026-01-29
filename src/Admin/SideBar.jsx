@@ -23,6 +23,7 @@ export default function Sidebar({ isOpen, onClose }) {
         <li onClick={() => goTo("/admin/news")}>Зар, мэдээ</li>
         <li onClick={() => goTo("/admin/program")}>Хөтөлбөрийн танилцуулга</li>
         <li onClick={() => goTo("/admin/scholarship")}>Амжилт, тэтгэлгийн бүртгэл</li>
+        <li onClick={() => goTo("/admin/calendar")}>Календарь</li>
         <li onClick={logout} style={{ color: "red" }}>Гарах</li>
       </ul>
     </div>

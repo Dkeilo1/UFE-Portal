@@ -6,6 +6,9 @@ import AdminLogin from "./Admin/AdminLogin";
 import ProtectedAdmin from "./Admin/ProtectedAdmin";
 import News from "./Admin/News";
 import EditPost from "./Admin/EditPost";
+import Calendar from "./Admin/Calendar";
+import AddCalendar from "./Admin/AddCalendar";
+import EditCalendar from "./Admin/EditCalendar";
 
 // PROGRAM IMPORTS
 import Program from "./Admin/Program";
@@ -33,6 +36,11 @@ function App() {
         <Route path="news" element={<News />} />
         <Route path="add-post" element={<AddPost />} />
         <Route path="edit-post/:id" element={<EditPost />} />
+
+        <Route path="calendar" element={<Calendar />} />
+        <Route path="calendar/add" element={<AddCalendar />} />
+        <Route path="calendar/edit/:id" element={<EditCalendar />} />
+
 
         {/* PROGRAM */}
         <Route path="program" element={<Program />} />
