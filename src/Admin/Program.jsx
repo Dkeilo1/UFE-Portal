@@ -47,7 +47,7 @@ export default function Program() {
     <div style={{ padding: "20px" }}>
       {/* Header */}
       <div className="news-header">
-        <h2>Хамтарсан хөтөлбөр</h2>
+        <h2>Хөтөлбөрийн танилцуулга</h2>
 
         <button
           className="news-add-btn"
