@@ -41,7 +41,7 @@ export default function AddCalendar() {
       alert(error.message);
     } else {
       alert("Календарь амжилттай нэмэгдлээ");
-      navigate("/admin/calendar/add");
+      navigate("/admin/calendar");
     }
 
     setLoading(false);
