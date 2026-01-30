@@ -125,7 +125,7 @@ export default function AddCalendar() {
                   onClick={addMoreRow}
                   className="secondary-btn"
                 >
-                  + Add more
+                  + Нэмэх
                 </button>
 
                 <button onClick={handleSubmit} disabled={loading}>
