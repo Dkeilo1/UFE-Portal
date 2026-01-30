@@ -93,9 +93,10 @@ export default function AddCalendar() {
                   }
                 >
                   <option value="">-- Сонгох --</option>
-                  <option value="Хурал">Хурал</option>
-                  <option value="Арга хэмжээ">Арга хэмжээ</option>
-                  <option value="Сургалт">Сургалт</option>
+                  <option value="БСА-ны ажил">БСА-ны ажил</option>
+                  <option value="Оюутны хөгжлийн төвийн ажил">Оюутны хөгжлийн төвийн ажил</option>
+                  <option value="Оюутны холбоо, Оюутны клуб">Оюутны холбоо, Оюутны клуб</option>
+                  <option value="Олон улсын хамтарсан хөтөлбөр">Олон улсын хамтарсан хөтөлбөр</option>
                 </select>
               </td>
 

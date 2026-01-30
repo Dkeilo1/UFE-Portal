@@ -94,9 +94,10 @@ export default function EditCalendar() {
       <label>Төрөл</label>
       <select value={type} onChange={(e) => setType(e.target.value)}>
         <option value="">-- Сонгох --</option>
-        <option value="Хурал">Хурал</option>
-        <option value="Арга хэмжээ">Арга хэмжээ</option>
-        <option value="Сургалт">Сургалт</option>
+        <option value="БСА-ны ажил">БСА-ны ажил</option>
+        <option value="Оюутны хөгжлийн төвийн ажил">Оюутны хөгжлийн төвийн ажил</option>
+        <option value="Оюутны холбоо, Оюутны клуб">Оюутны холбоо, Оюутны клуб</option>
+        <option value="Олон улсын хамтарсан хөтөлбөр">Олон улсын хамтарсан хөтөлбөр</option>
       </select>
 
       <button onClick={updateCalendar} disabled={loading}>
@@ -113,3 +114,4 @@ export default function EditCalendar() {
     </div>
   );
 }
+  
