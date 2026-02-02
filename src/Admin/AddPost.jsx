@@ -108,6 +108,7 @@ export default function AddPost() {
           <option value="Хурлын зар">Хурлын зар</option>
           <option value="Ажлын байрны зар">Ажлын байрны зар</option>
           <option value="Видео контент">Видео контент</option>
+          <option value="Пин постер">Пин постер</option>
         </select>
 
         <input type="file" accept="image/*" onChange={handleImage} />

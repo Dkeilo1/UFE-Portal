@@ -389,16 +389,16 @@ input[type="file"] {
 /* TABLE LAYOUT */
 .one-row-table {
   width: 100%;
-  border-collapse: separate;        /* IMPORTANT */
-  border-spacing: 50px 8px;         /* space between columns & row */
+  border-collapse: separate;       
+  border-spacing: 50px 8px;         
 }
 
 /* HEADER */
 .one-row-table th {
   text-align: left;
   padding: 8px 6px;
-  background: transparent;          /* remove ugly box */
-  color: #374151;                   /* soft dark gray */
+  background: transparent;          
+  color: #374151;                   
   font-size: 14px;
   font-weight: 600;
   white-space: nowrap;
