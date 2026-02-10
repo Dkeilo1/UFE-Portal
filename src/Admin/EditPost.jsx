@@ -11,9 +11,16 @@ export default function EditPost() {
   const [description, setDescription] = useState("");
   const [type, setType] = useState("");
 
-  // image states
+  // main image
   const [imageUrl, setImageUrl] = useState("");
   const [newImage, setNewImage] = useState(null);
+  const [mainPreview, setMainPreview] = useState(null);
+
+  // multiple images
+  const [images, setImages] = useState([]);        // URLs
+  const [newImages, setNewImages] = useState([]);  // Files
+  const [previews, setPreviews] = useState([]);
+
   const [loading, setLoading] = useState(false);
 
   /* ================================
@@ -40,7 +47,37 @@ export default function EditPost() {
       setDescription(data.description || "");
       setType(data.type || "");
       setImageUrl(data.image_url || "");
+      setImages(data.images || []);
+      setPreviews(data.images || []);
     }
+  };
+
+  /* ================================
+     HANDLERS
+  ================================ */
+
+  const handleMainImage = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    setNewImage(file);
+    setMainPreview(URL.createObjectURL(file));
+  };
+
+  const handleImages = (e) => {
+    const files = Array.from(e.target.files);
+
+    setNewImages((prev) => [...prev, ...files]);
+    setPreviews((prev) => [
+      ...prev,
+      ...files.map((f) => URL.createObjectURL(f)),
+    ]);
+
+    e.target.value = null;
+  };
+
+  const removeImage = (index) => {
+    setImages((prev) => prev.filter((_, i) => i !== index));
+    setPreviews((prev) => prev.filter((_, i) => i !== index));
   };
 
   /* ================================
@@ -50,25 +87,46 @@ export default function EditPost() {
     setLoading(true);
 
     let finalImageUrl = imageUrl;
+    let finalImages = [...images];
 
-    // upload new image if selected
     if (newImage) {
-      const fileExt = newImage.name.split(".").pop();
-      const filePath = `news/${id}-${Date.now()}.${fileExt}`;
+      const ext = newImage.name.split(".").pop();
+      const path = `posts/${id}-${Date.now()}.${ext}`;
 
-      const { error: uploadError } = await supabase.storage
+      const { error } = await supabase.storage
         .from("images")
-        .upload(filePath, newImage, { upsert: true });
+        .upload(path, newImage, { upsert: true });
 
-      if (uploadError) {
-        alert(uploadError.message);
+      if (error) {
+        alert(error.message);
         setLoading(false);
         return;
       }
 
       finalImageUrl = supabase.storage
         .from("images")
-        .getPublicUrl(filePath).data.publicUrl;
+        .getPublicUrl(path).data.publicUrl;
+    }
+
+    for (const img of newImages) {
+      const ext = img.name.split(".").pop();
+      const path = `posts/${Date.now()}-${Math.random()}.${ext}`;
+
+      const { error } = await supabase.storage
+        .from("images")
+        .upload(path, img);
+
+      if (error) {
+        alert(error.message);
+        setLoading(false);
+        return;
+      }
+
+      const url = supabase.storage
+        .from("images")
+        .getPublicUrl(path).data.publicUrl;
+
+      finalImages.push(url);
     }
 
     const { error } = await supabase
@@ -78,6 +136,7 @@ export default function EditPost() {
         description,
         type,
         image_url: finalImageUrl,
+        images: finalImages,
       })
       .eq("id", id);
 
@@ -95,8 +154,7 @@ export default function EditPost() {
      DELETE POST
   ================================ */
   const deletePost = async () => {
-    const confirmDelete = window.confirm("Энэ мэдээг устгах уу?");
-    if (!confirmDelete) return;
+    if (!window.confirm("Энэ мэдээг устгах уу?")) return;
 
     setLoading(true);
 
@@ -122,17 +180,8 @@ export default function EditPost() {
     <div className="form-container">
       <h2>Мэдээ засах</h2>
 
-      <input
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-        placeholder="Гарчиг"
-      />
-
-      <textarea
-        value={description}
-        onChange={(e) => setDescription(e.target.value)}
-        placeholder="Товч мэдээ"
-      />
+      <input value={title} onChange={(e) => setTitle(e.target.value)} />
+      <textarea value={description} onChange={(e) => setDescription(e.target.value)} />
 
       <select value={type} onChange={(e) => setType(e.target.value)}>
         <option value="Мэдээ">Мэдээ</option>
@@ -144,45 +193,48 @@ export default function EditPost() {
         <option value="Пин постер">Пин постер</option>
       </select>
 
-      {/* IMAGE */}
-      <div style={{ marginTop: "12px" }}>
-        <p><b>Одоогийн зураг</b></p>
+      {/* MAIN IMAGE */}
+      <p><b>Үндсэн зураг</b></p>
+      {(mainPreview || imageUrl) && (
+        <img src={mainPreview || imageUrl} className="preview" />
+      )}
 
-        {imageUrl ? (
-          <img src={imageUrl} alt="Program" className="preview" />
-        ) : (
-          <p>Зураг байхгүй</p>
-        )}
+      <p><b>Үндсэн зураг солих</b></p>
+      <input type="file" accept="image/*" onChange={handleMainImage} />
 
-        <p style={{ fontWeight: 600 }}>Зураг солих</p>
-        <input
-          type="file"
-          accept="image/*"
-          onChange={(e) => setNewImage(e.target.files[0])}
-        />
+      {/* MULTIPLE IMAGES */}
+      <p><b>Нэмэлт зургууд</b></p>
+      <input type="file" accept="image/*" multiple onChange={handleImages} />
+
+      <div className="preview-grid">
+        {previews.map((src, i) => (
+          <div key={i} className="preview-wrapper">
+            <img src={src} className="preview" />
+
+            {/* ✅ DELETE BUTTON WITH ITS OWN CLASS */}
+            <button
+              type="button"
+              className="remove-btn"
+              onClick={() => removeImage(i)}
+            >
+              ✕
+            </button>
+          </div>
+        ))}
       </div>
-
-      <button
-        type="button"
-        onClick={updatePost}
-        disabled={loading}
-        style={{ marginTop: "16px" }}
-      >
+      <div className="form-button-row">
+       <button onClick={updatePost} disabled={loading}>
         {loading ? "Хадгалж байна..." : "Хадгалах"}
-      </button>
+        </button>
 
-      <button
-        type="button"
+        <button
         onClick={deletePost}
         disabled={loading}
-        style={{
-          marginTop: "10px",
-          background: "#dc2626",
-          color: "white",
-        }}
-      >
+        className="danger-btn"
+        >
         Устгах
       </button>
+      </div>
     </div>
   );
 }

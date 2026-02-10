@@ -1,17 +1,25 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom"; // ✅ ADDED
+import { useNavigate } from "react-router-dom";
 import { supabase } from "../supabase";
 
 export default function AddPost() {
-  const navigate = useNavigate(); // ✅ ADDED
+  const navigate = useNavigate();
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [type, setType] = useState(""); // 👈 empty initially
+  const [type, setType] = useState("");
+
+  // main image
   const [image, setImage] = useState(null);
   const [preview, setPreview] = useState(null);
+
+  // multiple images
+  const [images, setImages] = useState([]);
+  const [previews, setPreviews] = useState([]);
+
   const [loading, setLoading] = useState(false);
 
+  // main image handler
   const handleImage = (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -19,10 +27,23 @@ export default function AddPost() {
     setPreview(URL.createObjectURL(file));
   };
 
+  // ✅ FIXED: append images instead of replacing
+  const handleImages = (e) => {
+    const files = Array.from(e.target.files);
+
+    setImages((prev) => [...prev, ...files]);
+    setPreviews((prev) => [
+      ...prev,
+      ...files.map((f) => URL.createObjectURL(f)),
+    ]);
+
+    // allow selecting the same file again
+    e.target.value = null;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // ✅ ONLY type validation
     if (!type) {
       alert("Нийтлэлийн төрөл сонгоно уу");
       return;
@@ -31,18 +52,19 @@ export default function AddPost() {
     setLoading(true);
 
     let imageUrl = null;
+    let imageUrls = [];
 
-    // Image is OPTIONAL now
+    // upload main image
     if (image) {
-      const fileExt = image.name.split(".").pop();
-      const fileName = `${Date.now()}.${fileExt}`;
+      const ext = image.name.split(".").pop();
+      const fileName = `${Date.now()}.${ext}`;
 
-      const { error: uploadError } = await supabase.storage
+      const { error } = await supabase.storage
         .from("images")
         .upload(`posts/${fileName}`, image);
 
-      if (uploadError) {
-        alert(uploadError.message);
+      if (error) {
+        alert(error.message);
         setLoading(false);
         return;
       }
@@ -54,12 +76,36 @@ export default function AddPost() {
       imageUrl = data.publicUrl;
     }
 
+    // upload multiple images
+    for (const img of images) {
+      const ext = img.name.split(".").pop();
+      const fileName = `${Date.now()}-${Math.random()}.${ext}`;
+
+      const { error } = await supabase.storage
+        .from("images")
+        .upload(`posts/${fileName}`, img);
+
+      if (error) {
+        alert(error.message);
+        setLoading(false);
+        return;
+      }
+
+      const { data } = supabase.storage
+        .from("images")
+        .getPublicUrl(`posts/${fileName}`);
+
+      imageUrls.push(data.publicUrl);
+    }
+
+    // insert news
     const { error } = await supabase.from("news").insert([
       {
         title,
         description,
         type,
         image_url: imageUrl,
+        images: imageUrls,
       },
     ]);
 
@@ -67,7 +113,7 @@ export default function AddPost() {
       alert(error.message);
     } else {
       alert("News added successfully!");
-      navigate("/admin/news"); 
+      navigate("/admin/news");
     }
 
     setLoading(false);
@@ -94,11 +140,7 @@ export default function AddPost() {
         <label>
           Нийтлэлийн төрөл <span style={{ color: "red" }}>*</span>
         </label>
-        <select
-          value={type}
-          onChange={(e) => setType(e.target.value)}
-          required
-        >
+        <select value={type} onChange={(e) => setType(e.target.value)} required>
           <option value="" disabled>
             -- Сонгох --
           </option>
@@ -111,9 +153,24 @@ export default function AddPost() {
           <option value="Пин постер">Пин постер</option>
         </select>
 
+        {/* Main image */}
         <input type="file" accept="image/*" onChange={handleImage} />
-
         {preview && <img src={preview} className="preview" alt="preview" />}
+
+        {/* Multiple images */}
+        <label>Нэмэлт зургууд</label>
+        <input
+          type="file"
+          accept="image/*"
+          multiple
+          onChange={handleImages}
+        />
+
+        <div className="preview-grid">
+          {previews.map((src, i) => (
+            <img key={i} src={src} className="preview" alt="extra" />
+          ))}
+        </div>
 
         <button className="upload-btn" disabled={loading}>
           {loading ? "Хадгалж байна..." : "Хадгалах"}

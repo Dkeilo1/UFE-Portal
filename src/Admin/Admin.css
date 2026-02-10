@@ -148,7 +148,7 @@ body {
 
 /* Labels */
 .form-container label {
-  display: inline-block;
+  display: block;
   margin-bottom: 6px;
   font-size: 14px;
   font-weight: 500;
@@ -477,9 +477,70 @@ input[type="file"] {
   color: #dc2626;
 }
 
+/* ================================
+   IMAGE REMOVE BUTTON FIX
+================================ */
+
+.preview-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.preview-wrapper .remove-btn {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+
+  /* 🔥 override form-container button styles */
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+
+  margin: 0 !important;
+  padding: 0 !important;
+
+  width: 26px;
+  height: 26px;
+
+  background: rgba(0, 0, 0, 0.6);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  font-size: 16px;
+  cursor: pointer;
+  z-index: 10;
+}
+
+.preview-wrapper .remove-btn:hover {
+  background: rgba(220, 38, 38, 0.9);
+}
 
 
+/* ================================
+   FORM BUTTON ROW FIX
+================================ */
 
+.form-button-row {
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+/* override block behavior ONLY here */
+.form-button-row button {
+  display: inline-flex;
+  margin-top: 0;
+}
+
+/* delete button style */
+.danger-btn {
+  background: #dc2626 !important;
+  color: white;
+}
+
+.danger-btn:hover {
+  background: #b91c1c !important;
+}
 
 
 
