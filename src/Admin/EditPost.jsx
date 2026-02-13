@@ -12,13 +12,12 @@ export default function EditPost() {
   const [type, setType] = useState("");
 
   // main image
-  const [imageUrl, setImageUrl] = useState("");
-  const [newImage, setNewImage] = useState(null);
-  const [mainPreview, setMainPreview] = useState(null);
+  const [mainImage, setMainImage] = useState(null);
+  const [mainPreview, setMainPreview] = useState("");
 
   // multiple images
-  const [images, setImages] = useState([]);        // URLs
-  const [newImages, setNewImages] = useState([]);  // Files
+  const [images, setImages] = useState([]);
+  const [newImages, setNewImages] = useState([]);
   const [previews, setPreviews] = useState([]);
 
   const [loading, setLoading] = useState(false);
@@ -46,7 +45,7 @@ export default function EditPost() {
       setTitle(data.title || "");
       setDescription(data.description || "");
       setType(data.type || "");
-      setImageUrl(data.image_url || "");
+      setMainPreview(data.image_url || "");
       setImages(data.images || []);
       setPreviews(data.images || []);
     }
@@ -59,8 +58,14 @@ export default function EditPost() {
   const handleMainImage = (e) => {
     const file = e.target.files[0];
     if (!file) return;
-    setNewImage(file);
+
+    setMainImage(file);
     setMainPreview(URL.createObjectURL(file));
+  };
+
+  const removeMainImage = () => {
+    setMainImage(null);
+    setMainPreview("");
   };
 
   const handleImages = (e) => {
@@ -71,8 +76,6 @@ export default function EditPost() {
       ...prev,
       ...files.map((f) => URL.createObjectURL(f)),
     ]);
-
-    e.target.value = null;
   };
 
   const removeImage = (index) => {
@@ -86,16 +89,17 @@ export default function EditPost() {
   const updatePost = async () => {
     setLoading(true);
 
-    let finalImageUrl = imageUrl;
+    let finalImageUrl = mainPreview;
     let finalImages = [...images];
 
-    if (newImage) {
-      const ext = newImage.name.split(".").pop();
+    // Upload main image
+    if (mainImage) {
+      const ext = mainImage.name.split(".").pop();
       const path = `posts/${id}-${Date.now()}.${ext}`;
 
       const { error } = await supabase.storage
         .from("images")
-        .upload(path, newImage, { upsert: true });
+        .upload(path, mainImage, { upsert: true });
 
       if (error) {
         alert(error.message);
@@ -108,6 +112,7 @@ export default function EditPost() {
         .getPublicUrl(path).data.publicUrl;
     }
 
+    // Upload additional images
     for (const img of newImages) {
       const ext = img.name.split(".").pop();
       const path = `posts/${Date.now()}-${Math.random()}.${ext}`;
@@ -180,8 +185,17 @@ export default function EditPost() {
     <div className="form-container">
       <h2>Мэдээ засах</h2>
 
-      <input value={title} onChange={(e) => setTitle(e.target.value)} />
-      <textarea value={description} onChange={(e) => setDescription(e.target.value)} />
+      <input
+        value={title}
+        onChange={(e) => setTitle(e.target.value)}
+        placeholder="Гарчиг"
+      />
+
+      <textarea
+        value={description}
+        onChange={(e) => setDescription(e.target.value)}
+        placeholder="Тайлбар"
+      />
 
       <select value={type} onChange={(e) => setType(e.target.value)}>
         <option value="Мэдээ">Мэдээ</option>
@@ -195,23 +209,40 @@ export default function EditPost() {
 
       {/* MAIN IMAGE */}
       <p><b>Үндсэн зураг</b></p>
-      {(mainPreview || imageUrl) && (
-        <img src={mainPreview || imageUrl} className="preview" />
+
+      {mainPreview && (
+        <div className="preview-wrapper">
+          <img src={mainPreview} className="preview" alt="" />
+          <button
+            type="button"
+            className="remove-btn"
+            onClick={removeMainImage}
+          >
+            ✕
+          </button>
+        </div>
       )}
 
       <p><b>Үндсэн зураг солих</b></p>
-      <input type="file" accept="image/*" onChange={handleMainImage} />
+      <input
+        type="file"
+        accept="image/*"
+        onChange={handleMainImage}
+      />
 
       {/* MULTIPLE IMAGES */}
-      <p><b>Нэмэлт зургууд</b></p>
-      <input type="file" accept="image/*" multiple onChange={handleImages} />
+      <p><b>Нэмэлт зураг</b></p>
+      <input
+        type="file"
+        accept="image/*"
+        multiple
+        onChange={handleImages}
+      />
 
       <div className="preview-grid">
         {previews.map((src, i) => (
           <div key={i} className="preview-wrapper">
-            <img src={src} className="preview" />
-
-            {/* ✅ DELETE BUTTON WITH ITS OWN CLASS */}
+            <img src={src} className="preview" alt="" />
             <button
               type="button"
               className="remove-btn"
@@ -222,18 +253,19 @@ export default function EditPost() {
           </div>
         ))}
       </div>
+
       <div className="form-button-row">
-       <button onClick={updatePost} disabled={loading}>
-        {loading ? "Хадгалж байна..." : "Хадгалах"}
+        <button onClick={updatePost} disabled={loading}>
+          {loading ? "Хадгалж байна..." : "Хадгалах"}
         </button>
 
         <button
-        onClick={deletePost}
-        disabled={loading}
-        className="danger-btn"
+          onClick={deletePost}
+          disabled={loading}
+          className="danger-btn"
         >
-        Устгах
-      </button>
+          Устгах
+        </button>
       </div>
     </div>
   );
