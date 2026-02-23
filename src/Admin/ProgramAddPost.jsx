@@ -18,19 +18,40 @@ export default function ProgramAddPost() {
     video_url: "",
   });
 
+  // main image
   const [image, setImage] = useState(null);
   const [preview, setPreview] = useState(null);
+
+  // ✅ multiple images (same as AddPost)
+  const [images, setImages] = useState([]);
+  const [previews, setPreviews] = useState([]);
+
   const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
+  // main image handler
   const handleImage = (e) => {
     const file = e.target.files[0];
     if (!file) return;
     setImage(file);
     setPreview(URL.createObjectURL(file));
+  };
+
+  // ✅ EXACT SAME multiple image logic
+  const handleImages = (e) => {
+    const files = Array.from(e.target.files);
+
+    setImages((prev) => [...prev, ...files]);
+    setPreviews((prev) => [
+      ...prev,
+      ...files.map((f) => URL.createObjectURL(f)),
+    ]);
+
+    // allow selecting same file again
+    e.target.value = null;
   };
 
   const handleSubmit = async (e) => {
@@ -42,29 +63,56 @@ export default function ProgramAddPost() {
     }
 
     setLoading(true);
+
     let imageUrl = null;
+    let imageUrls = [];
 
     try {
-      /* 1️⃣ Upload image to images/programs folder */
+      // upload main image
       if (image) {
         const ext = image.name.split(".").pop();
-        const fileName = `program_${Date.now()}.${ext}`;
-        const filePath = `programs/${fileName}`;
+        const fileName = `${Date.now()}.${ext}`;
 
-        const { error: uploadError } = await supabase.storage
-          .from("images") // ✅ bucket
-          .upload(filePath, image);
+        const { error } = await supabase.storage
+          .from("images")
+          .upload(`programs/${fileName}`, image);
 
-        if (uploadError) throw uploadError;
+        if (error) {
+          alert(error.message);
+          setLoading(false);
+          return;
+        }
 
         const { data } = supabase.storage
           .from("images")
-          .getPublicUrl(filePath);
+          .getPublicUrl(`programs/${fileName}`);
 
         imageUrl = data.publicUrl;
       }
 
-      /* 2️⃣ Insert into programs table */
+      // ✅ upload multiple images (same logic as AddPost)
+      for (const img of images) {
+        const ext = img.name.split(".").pop();
+        const fileName = `${Date.now()}-${Math.random()}.${ext}`;
+
+        const { error } = await supabase.storage
+          .from("images")
+          .upload(`programs/${fileName}`, img);
+
+        if (error) {
+          alert(error.message);
+          setLoading(false);
+          return;
+        }
+
+        const { data } = supabase.storage
+          .from("images")
+          .getPublicUrl(`programs/${fileName}`);
+
+        imageUrls.push(data.publicUrl);
+      }
+
+      // insert program
       const { error } = await supabase.from("programs").insert([
         {
           major: form.major,
@@ -78,6 +126,7 @@ export default function ProgramAddPost() {
           tuition: form.tuition || null,
           video_url: form.video_url || null,
           img_url: imageUrl,
+          images: imageUrls, // ✅ save array
         },
       ]);
 
@@ -170,11 +219,28 @@ export default function ProgramAddPost() {
           onChange={handleChange}
         />
 
+        {/* Main image */}
         <input type="file" accept="image/*" onChange={handleImage} />
+        {preview && <img src={preview} className="preview" alt="preview" />}
 
-        {preview && <img src={preview} alt="Preview" className="preview" />}
+        {/* Multiple images */}
+        <div className="left-upload">
+        <label>Нэмэлт зургууд</label>
+        <input
+          type="file"
+          accept="image/*"
+          multiple
+          onChange={handleImages}
+        />
+        </div>
 
-        <button className="upload-btn" disabled={loading}>
+        <div className="preview-grid">
+          {previews.map((src, i) => (
+            <img key={i} src={src} className="preview" alt="extra" />
+          ))}
+        </div>
+
+        <button disabled={loading}>
           {loading ? "Хадгалаж байна..." : "Хадгалах"}
         </button>
       </form>

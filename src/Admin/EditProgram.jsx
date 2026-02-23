@@ -24,6 +24,7 @@ export default function EditProgram() {
 
   const [imgUrl, setImgUrl] = useState("");
   const [newImage, setNewImage] = useState(null);
+  const [imgRemoved, setImgRemoved] = useState(false); // ✅ ADDED
   const [loading, setLoading] = useState(false);
 
   /* ================================
@@ -71,12 +72,21 @@ export default function EditProgram() {
   };
 
   /* ================================
+     REMOVE IMAGE (NEW)
+  ================================ */
+  const removeMainImage = () => {
+    setImgUrl("");
+    setNewImage(null);
+    setImgRemoved(true);
+  };
+
+  /* ================================
      UPDATE PROGRAM
   ================================ */
   const updateProgram = async () => {
     setLoading(true);
 
-    let finalImgUrl = imgUrl;
+    let finalImgUrl = imgRemoved ? null : imgUrl; // ✅ UPDATED
 
     try {
       // upload new image if selected
@@ -108,7 +118,7 @@ export default function EditProgram() {
           tuition: form.tuition,
           description: form.description,
           video_url: form.video_url,
-          img_url: finalImgUrl, // ✅ CORRECT COLUMN
+          img_url: finalImgUrl,
         })
         .eq("id", id);
 
@@ -188,10 +198,19 @@ export default function EditProgram() {
 
       {/* IMAGE */}
       <div style={{ marginTop: "12px" }}>
-        <p><b>Одоогийн зураг</b></p>
+        <p><b>Үндсэн зураг</b></p>
 
         {imgUrl ? (
-          <img src={imgUrl} alt="Program" className="preview" />
+          <div className="preview-wrapper">
+            <img src={imgUrl} alt="Program" className="preview" />
+            <button
+              type="button"
+              className="remove-btn"
+              onClick={removeMainImage}
+            >
+              ✕
+            </button>
+          </div>
         ) : (
           <p>Зураг байхгүй</p>
         )}
@@ -199,21 +218,26 @@ export default function EditProgram() {
         <input
           type="file"
           accept="image/*"
-          onChange={(e) => setNewImage(e.target.files[0])}
+          onChange={(e) => {
+            setNewImage(e.target.files[0]);
+            setImgRemoved(false);
+          }}
         />
       </div>
 
-      <button onClick={updateProgram} disabled={loading}>
-        {loading ? "Хадгалж байна..." : "Хадгалах"}
-      </button>
+      <div className="form-button-row">
+        <button onClick={updateProgram} disabled={loading}>
+          {loading ? "Хадгалж байна..." : "Хадгалах"}
+        </button>
 
-      <button
-        onClick={deleteProgram}
-        disabled={loading}
-        style={{ marginTop: "10px", background: "#dc2626", color: "white" }}
-      >
-        Устгах
-      </button>
+        <button
+          onClick={deleteProgram}
+          disabled={loading}
+          className="danger-btn"
+        >
+          Устгах
+        </button>
+      </div>
     </div>
   );
 }

@@ -223,7 +223,6 @@ export default function EditPost() {
         </div>
       )}
 
-      <p><b>Үндсэн зураг солих</b></p>
       <input
         type="file"
         accept="image/*"

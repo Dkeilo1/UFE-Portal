@@ -154,6 +154,7 @@ export default function AddPost() {
         </select>
 
         {/* Main image */}
+        <label>Үндсэн зураг</label>
         <input type="file" accept="image/*" onChange={handleImage} />
         {preview && <img src={preview} className="preview" alt="preview" />}
 
