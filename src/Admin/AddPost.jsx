@@ -112,7 +112,7 @@ export default function AddPost() {
     if (error) {
       alert(error.message);
     } else {
-      alert("News added successfully!");
+      alert("Шинэ мэдээ амжилттай нэмэгдлээ!");
       navigate("/admin/news");
     }
 

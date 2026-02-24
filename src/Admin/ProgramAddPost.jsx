@@ -132,7 +132,7 @@ export default function ProgramAddPost() {
 
       if (error) throw error;
 
-      alert("Program added successfully!");
+      alert("Хөтөлбөр амжилттай нэмэгдлээ!");
       navigate("/admin/program");
     } catch (err) {
       alert(err.message);
@@ -241,7 +241,7 @@ export default function ProgramAddPost() {
         </div>
 
         <button disabled={loading}>
-          {loading ? "Хадгалаж байна..." : "Хадгалах"}
+          {loading ? "Хадгалж байна..." : "Хадгалах"}
         </button>
       </form>
     </div>

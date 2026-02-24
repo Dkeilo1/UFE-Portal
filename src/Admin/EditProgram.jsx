@@ -24,7 +24,13 @@ export default function EditProgram() {
 
   const [imgUrl, setImgUrl] = useState("");
   const [newImage, setNewImage] = useState(null);
-  const [imgRemoved, setImgRemoved] = useState(false); // ✅ ADDED
+  const [imgRemoved, setImgRemoved] = useState(false);
+
+  // ✅ MULTIPLE IMAGES
+  const [images, setImages] = useState([]); // stored urls
+  const [newImages, setNewImages] = useState([]); // new files
+  const [previews, setPreviews] = useState([]); // preview urls
+
   const [loading, setLoading] = useState(false);
 
   /* ================================
@@ -61,6 +67,12 @@ export default function EditProgram() {
       });
 
       setImgUrl(data.img_url || "");
+
+      // ✅ load multiple images
+      if (data.images) {
+        setImages(data.images);
+        setPreviews(data.images);
+      }
     }
   };
 
@@ -72,7 +84,7 @@ export default function EditProgram() {
   };
 
   /* ================================
-     REMOVE IMAGE (NEW)
+     MAIN IMAGE REMOVE
   ================================ */
   const removeMainImage = () => {
     setImgUrl("");
@@ -81,44 +93,76 @@ export default function EditProgram() {
   };
 
   /* ================================
+     MULTIPLE IMAGE HANDLER
+  ================================ */
+  const handleImages = (e) => {
+    const files = Array.from(e.target.files);
+    setNewImages((prev) => [...prev, ...files]);
+
+    const previewUrls = files.map((file) =>
+      URL.createObjectURL(file)
+    );
+
+    setPreviews((prev) => [...prev, ...previewUrls]);
+  };
+
+  const removeImage = (index) => {
+    const updatedPreviews = previews.filter((_, i) => i !== index);
+    const updatedImages = images.filter((_, i) => i !== index);
+    const updatedNewImages = newImages.filter((_, i) => i !== index);
+
+    setPreviews(updatedPreviews);
+    setImages(updatedImages);
+    setNewImages(updatedNewImages);
+  };
+
+  /* ================================
      UPDATE PROGRAM
   ================================ */
   const updateProgram = async () => {
     setLoading(true);
 
-    let finalImgUrl = imgRemoved ? null : imgUrl; // ✅ UPDATED
-
     try {
-      // upload new image if selected
+      let finalImgUrl = imgRemoved ? null : imgUrl;
+
+      // upload main image
       if (newImage) {
         const ext = newImage.name.split(".").pop();
-        const filePath = `programs/program_${id}_${Date.now()}.${ext}`;
+        const filePath = `programs/main_${id}_${Date.now()}.${ext}`;
 
-        const { error: uploadError } = await supabase.storage
+        await supabase.storage
           .from("images")
           .upload(filePath, newImage, { upsert: true });
-
-        if (uploadError) throw uploadError;
 
         finalImgUrl = supabase.storage
           .from("images")
           .getPublicUrl(filePath).data.publicUrl;
       }
 
+      // ✅ upload multiple images
+      let uploadedUrls = [...images];
+
+      for (let file of newImages) {
+        const ext = file.name.split(".").pop();
+        const filePath = `programs/multi_${id}_${Date.now()}_${file.name}`;
+
+        await supabase.storage
+          .from("images")
+          .upload(filePath, file);
+
+        const publicUrl = supabase.storage
+          .from("images")
+          .getPublicUrl(filePath).data.publicUrl;
+
+        uploadedUrls.push(publicUrl);
+      }
+
       const { error } = await supabase
         .from("programs")
         .update({
-          degree: form.degree,
-          major: form.major,
-          university: form.university,
-          country: form.country,
-          city: form.city,
-          duration: form.duration,
-          lang: form.lang,
-          tuition: form.tuition,
-          description: form.description,
-          video_url: form.video_url,
+          ...form,
           img_url: finalImgUrl,
+          images: uploadedUrls,
         })
         .eq("id", id);
 
@@ -137,26 +181,13 @@ export default function EditProgram() {
      DELETE PROGRAM
   ================================ */
   const deleteProgram = async () => {
-    const confirmDelete = window.confirm(
-      "Та энэ хөтөлбөрийг устгахдаа итгэлтэй байна уу?"
-    );
-
-    if (!confirmDelete) return;
+    if (!window.confirm("Та устгахдаа итгэлтэй байна уу?")) return;
 
     setLoading(true);
 
-    const { error } = await supabase
-      .from("programs")
-      .delete()
-      .eq("id", id);
+    await supabase.from("programs").delete().eq("id", id);
 
-    if (error) {
-      alert(error.message);
-      setLoading(false);
-      return;
-    }
-
-    alert("Хөтөлбөр устгагдлаа");
+    setLoading(false);
     navigate("/admin/program");
   };
 
@@ -171,10 +202,10 @@ export default function EditProgram() {
       <input name="university" value={form.university} onChange={handleChange} placeholder="University" />
       <input name="country" value={form.country} onChange={handleChange} placeholder="Country" />
       <input name="city" value={form.city} onChange={handleChange} placeholder="City" />
-      <input name="duration" value={form.duration} onChange={handleChange} placeholder="Duration (e.g. 2+2)" />
+      <input name="duration" value={form.duration} onChange={handleChange} placeholder="Duration" />
 
       <select name="degree" value={form.degree} onChange={handleChange}>
-        <option value="">Хөтөлбөр сонгох</option>
+        <option value="">Сонгох</option>
         <option value="Үндсэн">Үндсэн</option>
         <option value="Хамтарсан">Хамтарсан</option>
       </select>
@@ -196,33 +227,50 @@ export default function EditProgram() {
         placeholder="Video URL"
       />
 
-      {/* IMAGE */}
-      <div style={{ marginTop: "12px" }}>
-        <p><b>Үндсэн зураг</b></p>
+      {/* MAIN IMAGE */}
+      <p><b>Үндсэн зураг</b></p>
 
-        {imgUrl ? (
-          <div className="preview-wrapper">
-            <img src={imgUrl} alt="Program" className="preview" />
+      {imgUrl && (
+        <div className="preview-wrapper">
+          <img src={imgUrl} className="preview" alt="" />
+          <button type="button" className="remove-btn" onClick={removeMainImage}>
+            ✕
+          </button>
+        </div>
+      )}
+
+      <input
+        type="file"
+        accept="image/*"
+        onChange={(e) => {
+          setNewImage(e.target.files[0]);
+          setImgRemoved(false);
+        }}
+      />
+
+      {/* MULTIPLE IMAGES */}
+      <p><b>Нэмэлт зураг</b></p>
+
+      <input
+        type="file"
+        accept="image/*"
+        multiple
+        onChange={handleImages}
+      />
+
+      <div className="preview-grid">
+        {previews.map((src, i) => (
+          <div key={i} className="preview-wrapper">
+            <img src={src} className="preview" alt="" />
             <button
               type="button"
               className="remove-btn"
-              onClick={removeMainImage}
+              onClick={() => removeImage(i)}
             >
               ✕
             </button>
           </div>
-        ) : (
-          <p>Зураг байхгүй</p>
-        )}
-
-        <input
-          type="file"
-          accept="image/*"
-          onChange={(e) => {
-            setNewImage(e.target.files[0]);
-            setImgRemoved(false);
-          }}
-        />
+        ))}
       </div>
 
       <div className="form-button-row">
