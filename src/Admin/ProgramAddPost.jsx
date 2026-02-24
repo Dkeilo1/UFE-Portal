@@ -149,7 +149,7 @@ export default function ProgramAddPost() {
       <form onSubmit={handleSubmit} className="program-form">
         <input
           name="major"
-          placeholder="Major *"
+          placeholder="Мэргэжил *"
           value={form.major}
           onChange={handleChange}
           required
@@ -157,28 +157,28 @@ export default function ProgramAddPost() {
 
         <input
           name="country"
-          placeholder="Country"
+          placeholder="Улс"
           value={form.country}
           onChange={handleChange}
         />
 
         <input
           name="city"
-          placeholder="City"
+          placeholder="Хот"
           value={form.city}
           onChange={handleChange}
         />
 
         <input
           name="university"
-          placeholder="University"
+          placeholder="Их сургууль"
           value={form.university}
           onChange={handleChange}
         />
 
         <input
           name="duration"
-          placeholder="Duration (e.g. 4 years)"
+          placeholder="Суралцах хугацаа (e.g. 4 years)"
           value={form.duration}
           onChange={handleChange}
         />
@@ -193,21 +193,21 @@ export default function ProgramAddPost() {
 
         <textarea
           name="description"
-          placeholder="Description"
+          placeholder="Тайлбар"
           value={form.description}
           onChange={handleChange}
         />
 
         <input
           name="language"
-          placeholder="Language"
+          placeholder="Суралцах хэл"
           value={form.language}
           onChange={handleChange}
         />
 
         <input
           name="tuition"
-          placeholder="Tuition (USD)"
+          placeholder="Төлбөр"
           value={form.tuition}
           onChange={handleChange}
         />

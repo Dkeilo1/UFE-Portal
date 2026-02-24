@@ -198,26 +198,28 @@ export default function EditProgram() {
     <div className="form-container full">
       <h1>Хөтөлбөр засах</h1>
 
-      <input name="major" value={form.major} onChange={handleChange} placeholder="Major" />
-      <input name="university" value={form.university} onChange={handleChange} placeholder="University" />
-      <input name="country" value={form.country} onChange={handleChange} placeholder="Country" />
-      <input name="city" value={form.city} onChange={handleChange} placeholder="City" />
-      <input name="duration" value={form.duration} onChange={handleChange} placeholder="Duration" />
+      <input name="major" value={form.major} onChange={handleChange} placeholder="Мэргэжил" />
+      <input name="university" value={form.university} onChange={handleChange} placeholder="Их сургууль" />
+      <input name="country" value={form.country} onChange={handleChange} placeholder="Улс" />
+      <input name="city" value={form.city} onChange={handleChange} placeholder="Хот" />
+      <input name="duration" value={form.duration} onChange={handleChange} placeholder="Суралцах хугацаа" />
 
       <select name="degree" value={form.degree} onChange={handleChange}>
         <option value="">Сонгох</option>
         <option value="Үндсэн">Үндсэн</option>
         <option value="Хамтарсан">Хамтарсан</option>
+        <option value="Rotation">Rotation</option>
+        <option value="BTEC">BTEC</option>
       </select>
 
-      <input name="lang" value={form.lang} onChange={handleChange} placeholder="Language" />
-      <input name="tuition" value={form.tuition} onChange={handleChange} placeholder="Tuition" />
+      <input name="lang" value={form.lang} onChange={handleChange} placeholder="Суралцах хэл" />
+      <input name="tuition" value={form.tuition} onChange={handleChange} placeholder="Төлбөр" />
 
       <textarea
         name="description"
         value={form.description}
         onChange={handleChange}
-        placeholder="Description"
+        placeholder="Тайлбар"
       />
 
       <input
