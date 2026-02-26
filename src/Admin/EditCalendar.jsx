@@ -99,18 +99,20 @@ export default function EditCalendar() {
         <option value="Оюутны холбоо, Оюутны клуб">Оюутны холбоо, Оюутны клуб</option>
         <option value="Олон улсын хамтарсан хөтөлбөр">Олон улсын хамтарсан хөтөлбөр</option>
       </select>
+      
+      <div className="form-button-row">
+        <button onClick={updateCalendar} disabled={loading}>
+          {loading ? "Хадгалж байна..." : "Хадгалах"}
+        </button>
 
-      <button onClick={updateCalendar} disabled={loading}>
-        {loading ? "Хадгалж байна..." : "Хадгалах"}
-      </button>
-
-      <button
-        onClick={deleteCalendar}
-        disabled={loading}
-        style={{ background: "#dc2626", color: "white", marginTop: "10px" }}
-      >
-        Устгах
-      </button>
+        <button
+          onClick={deleteCalendar}
+          disabled={loading}
+          className="danger-btn"
+        >
+          Устгах
+        </button>
+      </div>
     </div>
   );
 }
