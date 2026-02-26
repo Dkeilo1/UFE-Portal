@@ -94,11 +94,11 @@ export default function EditCalendar() {
       <label>Төрөл</label>
       <select value={type} onChange={(e) => setType(e.target.value)}>
         <option value="">-- Сонгох --</option>
-        <option value="Бакалаврын сургалтын алба">Бакалаврын сургалтын алба</option>
+        <option value="БСА-ны ажил">Бакалаврын сургалтын алба</option>
         <option value="Хөтөлбөр хэрэгжүүлэгч нэгж">Хөтөлбөр хэрэгжүүлэгч нэгж</option>
-        <option value="Оюутны хөгжлийн төв">Оюутны хөгжлийн төв</option>
-        <option value="Олон улсын хөтөлбөр">Олон улсын хөтөлбөр</option>
-        <option value="Оюутны холбоо, клуб">Оюутны холбоо, клуб</option>
+        <option value="Оюутны хөгжлийн төвийн ажил">Оюутны хөгжлийн төв</option>
+        <option value="Олон улсын хамтарсан хөтөлбөр">Олон улсын хөтөлбөр</option>
+        <option value="Оюутны холбоо, Оюутны клуб">Оюутны холбоо, клуб</option>
         <option value="Тэмдэглэлт өдөр">Тэмдэглэлт өдөр</option>
       </select>
       
