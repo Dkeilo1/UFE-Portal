@@ -63,7 +63,7 @@ export default function Calendar() {
               borderRadius: "20px",
               border: filterType === item.value ? "none" : "1px solid #ccc",
               background:
-                filterType === item.value ? "#007bff" : "#f5f5f5",
+                filterType === item.value ? "#2563eb" : "#f5f5f5",
               color: filterType === item.value ? "white" : "black",
               cursor: "pointer",
             }}

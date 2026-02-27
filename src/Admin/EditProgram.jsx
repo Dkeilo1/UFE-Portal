@@ -210,6 +210,8 @@ export default function EditProgram() {
         <option value="Хамтарсан">Хамтарсан</option>
         <option value="Rotation">Rotation</option>
         <option value="BTEC">BTEC</option>
+        <option value="Цагийн">Цагийн</option>
+        <option value="ACCA, CGMA">ACCA, CGMA</option>
       </select>
 
       <input name="lang" value={form.lang} onChange={handleChange} placeholder="Суралцах хэл" />
