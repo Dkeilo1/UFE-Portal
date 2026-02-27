@@ -5,21 +5,38 @@ import { supabase } from "../supabase";
 export default function Calendar() {
   const navigate = useNavigate();
   const [calendar, setCalendar] = useState([]);
+  const [filterType, setFilterType] = useState("");
 
   useEffect(() => {
     fetchCalendar();
-  }, []);
+  }, [filterType]);
 
   const fetchCalendar = async () => {
-    const { data, error } = await supabase
+    let query = supabase
       .from("calendar")
       .select("*")
       .order("date", { ascending: false });
+
+    if (filterType) {
+      query = query.eq("type", filterType);
+    }
+
+    const { data, error } = await query;
 
     if (!error) {
       setCalendar(data || []);
     }
   };
+
+  const filters = [
+    { label: "Бүгд", value: "" },
+    { label: "Бакалаврын сургалтын алба", value: "БСА-ны ажил" },
+    { label: "Хөтөлбөр хэрэгжүүлэгч нэгж", value: "Хөтөлбөр хэрэгжүүлэгч нэгж" },
+    { label: "Оюутны хөгжлийн төв", value: "Оюутны хөгжлийн төвийн ажил" },
+    { label: "Олон улсын хөтөлбөр", value: "Олон улсын хамтарсан хөтөлбөр" },
+    { label: "Оюутны холбоо, клуб", value: "Оюутны холбоо, Оюутны клуб" },
+    { label: "Тэмдэглэлт өдөр", value: "Тэмдэглэлт өдөр" },
+  ];
 
   return (
     <div style={{ padding: "20px" }}>
@@ -33,6 +50,27 @@ export default function Calendar() {
         >
           Календарь нэмэх
         </button>
+      </div>
+
+      {/* FILTER BUTTONS */}
+      <div style={{ margin: "20px 0", display: "flex", gap: "10px", flexWrap: "wrap" }}>
+        {filters.map((item) => (
+          <button
+            key={item.value}
+            onClick={() => setFilterType(item.value)}
+            style={{
+              padding: "8px 14px",
+              borderRadius: "20px",
+              border: filterType === item.value ? "none" : "1px solid #ccc",
+              background:
+                filterType === item.value ? "#007bff" : "#f5f5f5",
+              color: filterType === item.value ? "white" : "black",
+              cursor: "pointer",
+            }}
+          >
+            {item.label}
+          </button>
+        ))}
       </div>
 
       {/* Table */}
