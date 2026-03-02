@@ -5,19 +5,39 @@ import { supabase } from "../supabase";
 export default function News() {
   const navigate = useNavigate();
   const [news, setNews] = useState([]);
+  const [filterType, setFilterType] = useState("");
 
   useEffect(() => {
     fetchNews();
-  }, []);
+  }, [filterType]);
 
   const fetchNews = async () => {
-    const { data } = await supabase
+    let query = supabase
       .from("news")
       .select("*")
       .order("created_at", { ascending: false });
 
-    setNews(data || []);
+    if (filterType) {
+      query = query.eq("type", filterType);
+    }
+
+    const { data, error } = await query;
+
+    if (!error) {
+      setNews(data || []);
+    }
   };
+
+  const filters = [
+    { label: "Бүгд", value: "" },
+    { label: "Мэдээ", value: "Мэдээ" },
+    { label: "Зар", value: "Зар" },
+    { label: "БСА Зар", value: "БСА Зар" },
+    { label: "Хурлын зар", value: "Хурлын зар" },
+    { label: "Ажлын байрны зар", value: "Ажлын байрны зар" },
+    { label: "Видео контент", value: "Видео контент" },
+    { label: "Пин постер", value: "Пин постер" },
+  ];
 
   return (
     <div style={{ padding: "20px" }}>
@@ -31,6 +51,27 @@ export default function News() {
         >
           Мэдээ нэмэх
         </button>
+      </div>
+
+       {/* FILTER BUTTONS */}
+      <div style={{ margin: "20px 0", display: "flex", gap: "10px", flexWrap: "wrap" }}>
+        {filters.map((item) => (
+          <button
+            key={item.value}
+            onClick={() => setFilterType(item.value)}
+            style={{
+              padding: "8px 14px",
+              borderRadius: "20px",
+              border: filterType === item.value ? "none" : "1px solid #ccc",
+              background:
+                filterType === item.value ? "#2563eb" : "#f5f5f5",
+              color: filterType === item.value ? "white" : "black",
+              cursor: "pointer",
+            }}
+          >
+            {item.label}
+          </button>
+        ))}
       </div>
 
       {/* Table */}
