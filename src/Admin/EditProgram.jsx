@@ -18,6 +18,8 @@ export default function EditProgram() {
     duration: "",
     lang: "",
     tuition: "",
+    credits: "",
+    format: "",
     description: "",
     video_url: "",
   });
@@ -61,6 +63,8 @@ export default function EditProgram() {
         city: data.city || "",
         duration: data.duration || "",
         lang: data.lang || "",
+        credits: data.credits || "",
+        format: data.format || "",
         tuition: data.tuition || "",
         description: data.description || "",
         video_url: data.video_url || "",
@@ -214,7 +218,10 @@ export default function EditProgram() {
         <option value="ACCA, CGMA">ACCA, CGMA</option>
       </select>
 
+      <input name="format" value={form.format} onChange={handleChange} placeholder="Суралцах хэлбэр" />
+      <input name="credits" value={form.credits} onChange={handleChange} placeholder="Судлах кредит" />
       <input name="lang" value={form.lang} onChange={handleChange} placeholder="Суралцах хэл" />
+      
       <input name="tuition" value={form.tuition} onChange={handleChange} placeholder="Төлбөр" />
 
       <textarea

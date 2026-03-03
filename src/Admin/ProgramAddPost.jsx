@@ -14,6 +14,8 @@ export default function ProgramAddPost() {
     degree: "",
     description: "",
     language: "",
+    credits: "",
+    format: "",
     tuition: "",
     video_url: "",
   });
@@ -124,6 +126,8 @@ export default function ProgramAddPost() {
           description: form.description || null,
           lang: form.language || null,
           tuition: form.tuition || null,
+          credits: form.credits || null,
+          format: form.format || null,
           video_url: form.video_url || null,
           img_url: imageUrl,
           images: imageUrls, // ✅ save array
@@ -204,6 +208,20 @@ export default function ProgramAddPost() {
           name="language"
           placeholder="Суралцах хэл"
           value={form.language}
+          onChange={handleChange}
+        />
+
+        <input
+          name="format"
+          placeholder="Суралцах хэлбэр"
+          value={form.format}
+          onChange={handleChange}
+        />
+
+        <input
+          name="credits"
+          placeholder="Судлах кредит"
+          value={form.credits}
           onChange={handleChange}
         />
 
