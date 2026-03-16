@@ -6,6 +6,7 @@ export default function News() {
   const navigate = useNavigate();
   const [news, setNews] = useState([]);
   const [filterType, setFilterType] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     fetchNews();
@@ -28,6 +29,14 @@ export default function News() {
     }
   };
 
+  const filteredNews = news.filter((item) => {
+    const q = searchQuery.toLowerCase();
+    return (
+      item.title?.toLowerCase().includes(q) ||
+      item.description?.toLowerCase().includes(q)
+    );
+  });
+
   const filters = [
     { label: "Бүгд", value: "" },
     { label: "Мэдээ", value: "Мэдээ" },
@@ -44,7 +53,6 @@ export default function News() {
       {/* Header */}
       <div className="news-header">
         <h2>Бүх мэдээ</h2>
-
         <button
           className="news-add-btn"
           onClick={() => navigate("/admin/add-post")}
@@ -53,25 +61,44 @@ export default function News() {
         </button>
       </div>
 
-       {/* FILTER BUTTONS */}
-      <div style={{ margin: "20px 0", display: "flex", gap: "10px", flexWrap: "wrap" }}>
-        {filters.map((item) => (
-          <button
-            key={item.value}
-            onClick={() => setFilterType(item.value)}
-            style={{
-              padding: "8px 14px",
-              borderRadius: "20px",
-              border: filterType === item.value ? "none" : "1px solid #ccc",
-              background:
-                filterType === item.value ? "#2563eb" : "#f5f5f5",
-              color: filterType === item.value ? "white" : "black",
-              cursor: "pointer",
-            }}
-          >
-            {item.label}
-          </button>
-        ))}
+      {/* Filter + Search */}
+      <div style={{ margin: "20px 0", display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "10px" }}>
+        {/* Filter Pills */}
+        <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
+          {filters.map((item) => (
+            <button
+              key={item.value}
+              onClick={() => setFilterType(item.value)}
+              style={{
+                padding: "8px 14px",
+                borderRadius: "20px",
+                border: filterType === item.value ? "none" : "1px solid #ccc",
+                background: filterType === item.value ? "#2563eb" : "#f5f5f5",
+                color: filterType === item.value ? "white" : "black",
+                cursor: "pointer",
+                fontSize: "15px",
+              }}
+            >
+              {item.label}
+            </button>
+          ))}
+        </div>
+
+        {/* Search Box */}
+        <input
+          type="text"
+          placeholder="Хайх..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          style={{
+            padding: "8px 14px",
+            borderRadius: "20px",
+            border: "1px solid #ccc",
+            fontSize: "15px",
+            width: "220px",
+            outline: "none",
+          }}
+        />
       </div>
 
       {/* Table */}
@@ -88,23 +115,19 @@ export default function News() {
         </thead>
 
         <tbody>
-          {news.map((item, index) => (
+          {filteredNews.map((item, index) => (
             <tr key={item.id}>
               <td>{index + 1}</td>
               <td>{item.title}</td>
-              <td className="truncate">
-                {item.description}
-              </td>
+              <td className="truncate">{item.description}</td>
               <td>{item.type}</td>
+              <td>{new Date(item.created_at).toLocaleDateString()}</td>
               <td>
-                {new Date(item.created_at).toLocaleDateString()}
-              </td>
-              <td>
-                <button 
-                className="edit-btn"
-                onClick={() => navigate(`/admin/edit-post/${item.id}`)}
+                <button
+                  className="edit-btn"
+                  onClick={() => navigate(`/admin/edit-post/${item.id}`)}
                 >
-                Edit
+                  Edit
                 </button>
               </td>
             </tr>

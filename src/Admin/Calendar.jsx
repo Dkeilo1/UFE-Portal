@@ -6,6 +6,7 @@ export default function Calendar() {
   const navigate = useNavigate();
   const [calendar, setCalendar] = useState([]);
   const [filterType, setFilterType] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     fetchCalendar();
@@ -28,6 +29,11 @@ export default function Calendar() {
     }
   };
 
+  const filteredCalendar = calendar.filter((item) => {
+    const q = searchQuery.toLowerCase();
+    return item.title?.toLowerCase().includes(q);
+  });
+
   const filters = [
     { label: "Бүгд", value: "" },
     { label: "Бакалаврын сургалтын алба", value: "БСА-ны ажил" },
@@ -43,7 +49,6 @@ export default function Calendar() {
       {/* Header */}
       <div className="news-header">
         <h2>Календарь</h2>
-
         <button
           className="news-add-btn"
           onClick={() => navigate("/admin/calendar/add")}
@@ -52,25 +57,44 @@ export default function Calendar() {
         </button>
       </div>
 
-      {/* FILTER BUTTONS */}
-      <div style={{ margin: "20px 0", display: "flex", gap: "10px", flexWrap: "wrap" }}>
-        {filters.map((item) => (
-          <button
-            key={item.value}
-            onClick={() => setFilterType(item.value)}
-            style={{
-              padding: "8px 14px",
-              borderRadius: "20px",
-              border: filterType === item.value ? "none" : "1px solid #ccc",
-              background:
-                filterType === item.value ? "#2563eb" : "#f5f5f5",
-              color: filterType === item.value ? "white" : "black",
-              cursor: "pointer",
-            }}
-          >
-            {item.label}
-          </button>
-        ))}
+      {/* Filter + Search */}
+      <div style={{ margin: "20px 0", display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "10px" }}>
+        {/* Filter Pills */}
+        <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
+          {filters.map((item) => (
+            <button
+              key={item.value}
+              onClick={() => setFilterType(item.value)}
+              style={{
+                padding: "8px 14px",
+                borderRadius: "20px",
+                border: filterType === item.value ? "none" : "1px solid #ccc",
+                background: filterType === item.value ? "#2563eb" : "#f5f5f5",
+                color: filterType === item.value ? "white" : "black",
+                cursor: "pointer",
+                fontSize: "12px",
+              }}
+            >
+              {item.label}
+            </button>
+          ))}
+        </div>
+
+        {/* Search Box */}
+        <input
+          type="text"
+          placeholder="Хайх..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          style={{
+            padding: "8px 14px",
+            borderRadius: "20px",
+            border: "1px solid #ccc",
+            fontSize: "15px",
+            width: "220px",
+            outline: "none",
+          }}
+        />
       </div>
 
       {/* Table */}
@@ -86,7 +110,7 @@ export default function Calendar() {
         </thead>
 
         <tbody>
-          {calendar.length === 0 && (
+          {filteredCalendar.length === 0 && (
             <tr>
               <td colSpan="5" style={{ textAlign: "center", padding: "20px" }}>
                 Одоогоор бүртгэл алга байна
@@ -94,22 +118,18 @@ export default function Calendar() {
             </tr>
           )}
 
-          {calendar.map((item, index) => (
+          {filteredCalendar.map((item, index) => (
             <tr key={item.id}>
               <td>{index + 1}</td>
               <td>{item.title}</td>
               <td>
-                {item.date
-                  ? new Date(item.date).toLocaleDateString()
-                  : "-"}
+                {item.date ? new Date(item.date).toLocaleDateString() : "-"}
               </td>
               <td>{item.type}</td>
               <td>
                 <button
                   className="edit-btn"
-                  onClick={() =>
-                    navigate(`/admin/calendar/edit/${item.id}`)
-                  }
+                  onClick={() => navigate(`/admin/calendar/edit/${item.id}`)}
                 >
                   Edit
                 </button>
