@@ -90,7 +90,7 @@ export default function Calendar() {
             padding: "8px 14px",
             borderRadius: "20px",
             border: "1px solid #ccc",
-            fontSize: "15px",
+            fontSize: "12px",
             width: "220px",
             outline: "none",
           }}
